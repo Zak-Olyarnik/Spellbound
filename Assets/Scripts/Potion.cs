@@ -30,9 +30,14 @@ public class Potion : MonoBehaviour
 
     private void OnMouseUp()
     {
+        PotionWasClicked();
+    }
+
+    public void PotionWasClicked()
+    {
         if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             return;
-        Potion flyingPotion = Instantiate(gameObject,gameObject.transform.parent).GetComponent<Potion>();
+        Potion flyingPotion = Instantiate(gameObject, gameObject.transform.parent).GetComponent<Potion>();
         flyingPotion.ToInfinityAndBeyond(letter);
     }
 

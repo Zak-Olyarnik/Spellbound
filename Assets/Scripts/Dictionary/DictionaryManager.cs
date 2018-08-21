@@ -12,7 +12,7 @@ public class DictionaryManager : MonoBehaviour {
     private string[] gradeLevelWords; /* Holds the grade-level words */
     private string[] letterCollections; /* Holds the list of letter collections generated from grade-level words */
     private int[] collectionWordCounts; /* Holds the number of words each collection can make */
-    private const string FULL_WORD_LIST_PATH = "Words/full_list";
+    private const string FULL_WORD_LIST_PATH = "Words/full_list_curated";
     private const string GRADE_LEVEL_WORD_LIST_PATH = "Words/gradeLevelWords";
     private const string LETTER_COLLECTION_LIST_PATH = "Words/collectionsWithCount";
 
@@ -25,6 +25,7 @@ public class DictionaryManager : MonoBehaviour {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
             LoadAllFiles();
         }
         else
@@ -36,6 +37,7 @@ public class DictionaryManager : MonoBehaviour {
 
     private void LoadAllFiles()
     {
+        string[] separator = new string[] { "\r\n" };
         /* Load the full list of words */
         TextAsset fullList = Resources.Load<TextAsset>(FULL_WORD_LIST_PATH);
         if (fullList == null)
@@ -45,8 +47,7 @@ public class DictionaryManager : MonoBehaviour {
         }
         else
         {
-            allWords = fullList.text.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
-            allWords = (from w in allWords select w.Trim()).ToArray();
+            allWords = fullList.text.Split(separator, StringSplitOptions.None);
             Debug.Log("Loaded " + allWords.Length + " words into master word list");
         }
 
@@ -59,8 +60,7 @@ public class DictionaryManager : MonoBehaviour {
         }
         else
         {
-            gradeLevelWords = gradeLevelList.text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            gradeLevelWords = (from w in gradeLevelWords select w.Trim()).ToArray();
+            gradeLevelWords = gradeLevelList.text.Split(separator, StringSplitOptions.None);
             Debug.Log("Loaded " + gradeLevelWords.Length + " words into grade level word list");
         }
 
@@ -73,7 +73,7 @@ public class DictionaryManager : MonoBehaviour {
         }
         else
         {
-            string[] combinations = letterCollectionList.text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] combinations = letterCollectionList.text.Split(separator, StringSplitOptions.None);
             letterCollections = new string[combinations.Length];
             collectionWordCounts = new int[combinations.Length];
             for (int i = 0; i < combinations.Length; i++)
